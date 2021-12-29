@@ -14,17 +14,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
+    #strategy:
+      #matrix:
+        #node-version: [12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 12.x
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
@@ -33,6 +33,17 @@ jobs:
       uses: actions/upload-artifact@v2.3.1
       with:
         # Artifact name
-        name: my-artifact ${{ matrix.node-version }}
+        name: my-artifact
         # A file, directory or wildcard pattern that describes what to upload
         path: ${{ github.workspace }}
+
+  deployment:
+    runs-on: ubuntu
+    needs: [build]
+    steps: 
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.1.0
+      with:
+        # Artifact name
+        name: my-artifact
+      
