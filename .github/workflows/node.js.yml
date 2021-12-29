@@ -38,7 +38,7 @@ jobs:
         path: ${{ github.workspace }}
 
   deployment:
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     needs: [build]
     steps: 
     - name: Download a Build Artifact
